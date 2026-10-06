@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Contoso.Support.Agents/Contoso.Support.Agents.csproj" />
+    <Project Path="src/Contoso.Support.Api/Contoso.Support.Api.csproj" />
+    <Project Path="src/Contoso.Support.AppHost/Contoso.Support.AppHost.csproj" />
+    <Project Path="src/Contoso.Support.Application/Contoso.Support.Application.csproj" />
+    <Project Path="src/Contoso.Support.Domain/Contoso.Support.Domain.csproj" />
+    <Project Path="src/Contoso.Support.Infrastructure/Contoso.Support.Infrastructure.csproj" />
+    <Project Path="src/Contoso.Support.RAG/Contoso.Support.RAG.csproj" />
+    <Project Path="src/Contoso.Support.ServiceDefaults/Contoso.Support.ServiceDefaults.csproj" />
+    <Project Path="src/Contoso.Support.Tools/Contoso.Support.Tools.csproj" />
+    <Project Path="src/Contoso.Support.Workers/Contoso.Support.Workers.csproj" />
+  </Folder>
+</Solution>

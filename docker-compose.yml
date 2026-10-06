@@ -1,0 +1,16 @@
+# Contoso Support API — Docker Compose for local development
+# Use this when you don't want to run via Aspire
+
+version: '3.8'
+
+services:
+  contoso-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AzureAI__Endpoint=${AZURE_AI_ENDPOINT}
+    restart: unless-stopped

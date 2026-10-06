@@ -1,1 +1,53 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vs/
+
+# NuGet
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+
+# User-specific
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (React WebUI)
+node_modules/
+dist/
+.env
+.env.local
+
+# Azure / Secrets
+appsettings.*.local.json
+*.pfx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Roadmap source (generated from external tool)
 docs/Roadmap.md
+data/
+docs/
