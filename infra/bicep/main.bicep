@@ -4,7 +4,7 @@
 // ============================================================
 
 param location string = resourceGroup().location
-param projectName string = 'contosov2'
+param projectName string = 'contosov5'
 param environment string = 'dev'
 
 // Tags applied to all resources
@@ -31,6 +31,7 @@ resource aiFoundry 'Microsoft.CognitiveServices/accounts@2026-09-01' = {
   properties: {
     customSubDomainName: '${projectName}-foundry'
     allowProjectManagement: true
+    publicNetworkAccess: 'Enabled'
   }
 }
 
@@ -39,6 +40,9 @@ resource aiProject 'Microsoft.CognitiveServices/accounts/projects@2026-09-01' = 
   parent: aiFoundry
   name: '${projectName}-project'
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {}
 }
 
@@ -46,6 +50,9 @@ resource aiProject 'Microsoft.CognitiveServices/accounts/projects@2026-09-01' = 
 resource gptModel 'Microsoft.CognitiveServices/accounts/deployments@2026-09-01' = {
   parent: aiFoundry
   name: 'gpt-5.4-nano'
+  dependsOn: [
+    aiProject
+  ]
   sku: {
     name: 'GlobalStandard'
     capacity: 8
@@ -104,6 +111,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
     enableRbacAuthorization: true
     enableSoftDelete: true
     softDeleteRetentionInDays: 7
+    publicNetworkAccess: 'Enabled'
   }
 }
 
@@ -119,6 +127,7 @@ resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   }
   properties: {
     adminUserEnabled: true
+    publicNetworkAccess: 'Enabled'
   }
 }
 
@@ -212,6 +221,22 @@ resource apiApp 'Microsoft.App/containerApps@2024-03-01' = {
         ]
       }
     }
+  }
+}
+
+// ============================================================
+// 8. Role Assignments (RBAC)
+// ============================================================
+// Cognitive Services OpenAI User
+var cognitiveServicesOpenAiUserRoleId = '5e0bd9bd-7b93-4f28-af87-19fc36ad61bd'
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(aiFoundry.id, apiApp.id, cognitiveServicesOpenAiUserRoleId)
+  scope: aiFoundry
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', cognitiveServicesOpenAiUserRoleId)
+    principalId: apiApp.identity.principalId
+    principalType: 'ServicePrincipal'
   }
 }
 

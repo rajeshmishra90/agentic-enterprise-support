@@ -1,4 +1,5 @@
 using Azure.AI.Projects;
+using Azure.Core;
 using Azure.Identity;
 using Contoso.Support.Agents;
 using Contoso.Support.Application.DTOs;
@@ -13,12 +14,17 @@ builder.AddServiceDefaults();
 // --- OpenAPI (.NET 10 native) ---
 builder.Services.AddOpenApi();
 
+
 // --- Azure AI Foundry ---
 var foundryEndpoint = builder.Configuration["AzureAI:Endpoint"]
     ?? throw new InvalidOperationException("AzureAI:Endpoint configuration is required.");
 
+TokenCredential credential = builder.Environment.IsDevelopment()
+    ? new DefaultAzureCredential()
+    : new ManagedIdentityCredential();
+
 builder.Services.AddSingleton(_ =>
-    new AIProjectClient(new Uri(foundryEndpoint), new DefaultAzureCredential()));
+    new AIProjectClient(new Uri(foundryEndpoint), credential));
 
 // --- Dependency Injection ---
 builder.Services.AddSingleton<IConversationalTriageAgent, ConversationalTriageAgent>();
